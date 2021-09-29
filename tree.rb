@@ -74,9 +74,34 @@ class BBST
 		end
 		return root
 	end
-
-
-
+	
+	def find(value, root = @root)
+		if root == nil
+			return root
+		elsif value < root.value
+			find(value, root.left_children)
+		elsif value > root.value
+			find(value, root.right_children)
+		else
+			return root
+		end
+	end
+	
+	def level_order(root = @root, temparr = [], queue = [])
+		if root == nil
+			return root
+		else
+			temparr.push(root.value)
+			if root.left_children != nil
+				queue.push(root.left_children)
+			end
+			if root.right_children != nil
+				queue.push(root.right_children)
+			end
+			level_order(queue.shift, temparr, queue)
+		end
+		return temparr
+	end
 	def inorder(root = @root, temparr = [])
 
 		if root
@@ -87,6 +112,42 @@ class BBST
 		return temparr
 	end
 	
+	def postorder(root = @root, temparr = [])
+		
+		if root
+		postorder(root.left_children, temparr)
+		postorder(root.right_children, temparr)
+		temparr << root.value
+		end
+		return temparr
+	end
+	
+	def preorder(root = @root, temparr = [])
+
+		if root
+		temparr << root.value
+		preorder(root.left_children, temparr)
+		preorder(root.right_children, temparr)
+		end
+		return temparr
+	end
+	
+	def height(value = @root.value, root = find(value))
+		if root == nil
+			return -1
+		else
+			
+			lheight = height(value, root.left_children)
+			rheight = height(value, root.right_children)
+			if lheight > rheight
+				return lheight + 1
+
+			else
+				return rheight + 1
+			end
+		end	
+	end
+
 	def pretty_print(node = @root, prefix = '', is_left = true)
 		pretty_print(node.right_children, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_children
 		puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.value}"
@@ -96,13 +157,15 @@ class BBST
 end
 
 arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
+
 tree = BBST.new(arr)
-p tree.arr
-tree.insert(69)
-tree.insert(71)
-tree.insert(9999)
+#tree.insert(69)
+#tree.insert(71)
+#tree.insert(9999)
+#tree.delete(324)
 print tree.pretty_print
-p tree.inorder
-tree.delete(324)
-print tree.pretty_print
-p tree.inorder
+p tree.height(8)
+
+
+
+
