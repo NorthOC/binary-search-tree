@@ -142,17 +142,12 @@ class BBST
 #returns the height of a node or full tree	
 	def height(value = @root.value, root = find(value))
 		if root == nil
-			return -1
+			return 0 
 		else
 			
 			lheight = height(value, root.left_children)
 			rheight = height(value, root.right_children)
-			if lheight > rheight
-				return lheight + 1
-
-			else
-				return rheight + 1
-			end
+			return [lheight, rheight].max + 1
 		end	
 	end
 
@@ -181,7 +176,7 @@ class BBST
 		else
 		lh = height(@root.value, root.left_children)
 		rh = height(@root.value, root.right_children)
-		if ((lh - rh) <= 0) && balanced?(root.left_children) && balanced?(root.right_children)
+		if ((lh - rh).abs <= 1) && balanced?(root.left_children) && balanced?(root.right_children)
 			return true
 		end
 			return false
