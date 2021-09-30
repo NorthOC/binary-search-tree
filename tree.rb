@@ -64,9 +64,11 @@ class BBST
 			if root.left_children == nil
 				temp = root.right_children
 				root = nil
+				@arr.delete(value)
 				return temp
 			elsif root.right_children == nil
 				temp = root.left_children
+				@arr.delete(value)
 				return temp
 			end
 			
@@ -186,6 +188,7 @@ class BBST
 #rebalance an unbalanced tree
 	def rebalance
 		temparr = self.inorder(@root)
+		@arr = temparr
 		return @root = self.build_tree(temparr)
 	end
 
