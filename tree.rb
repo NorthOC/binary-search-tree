@@ -10,7 +10,8 @@ class BBST
 		@root = build_tree(@arr)
 		@temparr = []
 	end
-	
+
+#builds the tree	
 	def build_tree(arr, arr_start = 0, arr_end = arr.length - 1)
 
 		if arr_start > arr_end
@@ -23,7 +24,8 @@ class BBST
 
 		return root
 	end
-	
+
+#insert a value at leaf-level
 	def insert(value, root = @root)
 		if root == nil
 			@arr = @arr.push(value)
@@ -39,7 +41,7 @@ class BBST
 			return root
 		end
 	end
-	
+
 	def min_value_node(node)
 		current = node
 
@@ -48,7 +50,8 @@ class BBST
 		end
 		return current
 	end
-	
+
+#delete a node from the tree	
 	def delete(value, root = @root)
 		if root == nil
 			return root
@@ -74,7 +77,8 @@ class BBST
 		end
 		return root
 	end
-	
+
+#find a node in the tree and return it
 	def find(value, root = @root)
 		if root == nil
 			return root
@@ -86,7 +90,8 @@ class BBST
 			return root
 		end
 	end
-	
+
+#return an array sorted breadth-first	
 	def level_order(root = @root, temparr = [], queue = [])
 		if root == nil
 			return root
@@ -102,6 +107,8 @@ class BBST
 		end
 		return temparr
 	end
+
+#3 methods to return an array using depth-first search
 	def inorder(root = @root, temparr = [])
 
 		if root
@@ -131,7 +138,8 @@ class BBST
 		end
 		return temparr
 	end
-	
+
+#returns the height of a node or full tree	
 	def height(value = @root.value, root = find(value))
 		if root == nil
 			return -1
@@ -148,6 +156,45 @@ class BBST
 		end	
 	end
 
+
+	def depth(value = @root.value, root = @root)
+		if root == nil
+			return root
+		elsif root.value == value
+			return 0
+		elsif value > root.value
+			ldepth =  depth(value, root.right_children)
+
+		elsif value < root.value
+			rdepth = depth(value, root.left_children)
+		end
+		if ldepth == nil
+			return rdepth + 1
+		elsif rdepth == nil
+			return ldepth + 1
+		end
+	end
+	
+	def balanced?(root = @root)
+		if root == nil
+			return true
+		else
+		lh = height(@root.value, root.left_children)
+		rh = height(@root.value, root.right_children)
+		if ((lh - rh) <= 0) && balanced?(root.left_children) && balanced?(root.right_children)
+			return true
+		end
+			return false
+		end
+	end
+
+#rebalance an unbalanced tree
+	def rebalance
+		temparr = self.inorder(@root)
+		return @root = self.build_tree(temparr)
+	end
+
+#ugly code for a pretty print of a tree to console
 	def pretty_print(node = @root, prefix = '', is_left = true)
 		pretty_print(node.right_children, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_children
 		puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.value}"
@@ -155,17 +202,4 @@ class BBST
 	end
 			
 end
-
-arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
-
-tree = BBST.new(arr)
-#tree.insert(69)
-#tree.insert(71)
-#tree.insert(9999)
-#tree.delete(324)
-print tree.pretty_print
-p tree.height(8)
-
-
-
 
